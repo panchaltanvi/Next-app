@@ -14,11 +14,16 @@ export default function Home() {
     const minLength = 2;
     const maxLength = 20;
 
-    const hasRepeatingChars = (str) => {
-      return /(.)\1{2,}/.test(str);  // checks for three or more repeating characters
+    const hasRepeatingChars = (str: string) => {
+      for (let i = 0; i < str.length - 2; i++) {
+        if (str[i] === str[i + 1] && str[i + 1] === str[i + 2]) {
+          return true;
+        }
+      }
+      return false;
     };
 
-    const isProperName = (str) => {
+    const isProperName = (str: string) => {
       return str.charAt(0) === str.charAt(0).toUpperCase() && str.slice(1) === str.slice(1).toLowerCase();
     };
 
