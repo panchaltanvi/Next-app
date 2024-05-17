@@ -48,11 +48,11 @@ export default function Home() {
     }
   }, [value]);
 
-  useEffect(() => {
-    if (pathname === "/prediction") {
-      router.push("/app/page.tsx");
-    }
-  }, [pathname, router]);
+  // useEffect(() => {
+  //   if (pathname === "/prediction") {
+  //     router.push("page.tsx");
+  //   }
+  // }, [pathname, router]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
