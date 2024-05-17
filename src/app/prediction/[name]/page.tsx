@@ -20,7 +20,6 @@ const getPredictedAge = async (name: string) => {
   }
   
   async function Prediction({ params }: Params) {
-    // return <h1>Name</h1>;
     const ageData = getPredictedAge(params.name);
     const genderData = getPredictedGender(params.name);
     const nationalityData = getPredictedNationality(params.name);

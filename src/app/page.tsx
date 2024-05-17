@@ -1,15 +1,61 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function Home() {
   const [value, setValue] = useState("");
-  const { push } = useRouter();
+  const [error, setError] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const nameRegex = /^[A-Za-z]+$/;
+    const minLength = 2;
+    const maxLength = 20;
+
+    const hasRepeatingChars = (str) => {
+      return /(.)\1{2,}/.test(str);  // checks for three or more repeating characters
+    };
+
+    const isProperName = (str) => {
+      return str.charAt(0) === str.charAt(0).toUpperCase() && str.slice(1) === str.slice(1).toLowerCase();
+    };
+
+    if (value === "") {
+      setError("Please enter your name.");
+      setIsDisabled(true);
+    } else if (!nameRegex.test(value)) {
+      setError("Name should only contain letters.");
+      setIsDisabled(true);
+    } else if (value.length < minLength || value.length > maxLength) {
+      setError(`Name should be between ${minLength} and ${maxLength} characters.`);
+      setIsDisabled(true);
+    } else if (hasRepeatingChars(value)) {
+      setError("Name should not contain repeating characters.");
+      setIsDisabled(true);
+    } else if (!isProperName(value)) {
+      setError("Please enter a proper name with the first letter capitalized.");
+      setIsDisabled(true);
+    } else {
+      setError("");
+      setIsDisabled(false);
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (pathname === "/prediction") {
+      router.push("/app/page.tsx");
+    }
+  }, [pathname, router]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    push(`/prediction/${value}`);
+    if (!isDisabled) {
+      router.push(`/prediction/${value}`);
+    }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="p-4 shadow-md bg-white rounded-md">
@@ -22,11 +68,13 @@ export default function Home() {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded text-black"
-            placeholder="Type something..."
+            placeholder="Enter letters only"
           />
+          {error && <p className="text-red-500">{error}</p>}
           <button
             type="submit"
             className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            disabled={isDisabled}
           >
             Submit
           </button>
