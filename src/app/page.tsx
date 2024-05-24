@@ -65,7 +65,7 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="p-4 shadow-md bg-white rounded-md">
         <h1 className="text-2xl font-semibold mb-4 text-black">
-          Enter Your FullName
+          Enter Your Name
         </h1>
         <form onSubmit={handleSubmit} className="space-y-3">
           <input
